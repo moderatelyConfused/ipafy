@@ -8,6 +8,14 @@ tabToTranscribing.getOrDefault = function(key, def) {
     else return def;
 };
 var dict = null;
+var tabToFeatures = new Map(); // { stress: false, tie: true }
+
+function getFeatures(tabId) {
+    if (!tabToFeatures.has(tabId)) {
+        tabToFeatures.set(tabId, { stress: false, tie: true });
+    }
+    return tabToFeatures.get(tabId);
+}
 
 function extractLine(line) {
     var m = line.match(/^([-A-Z0-9]+)  (.+)$/);
@@ -62,7 +70,8 @@ function sendDict(tabId) {
 }
 
 function doTranscribe(tabId) {
-    browser.tabs.sendMessage(tabId, {action: "do-transcribe", dict: dict});
+    var features = getFeatures(tabId);
+    browser.tabs.sendMessage(tabId, {action: "do-transcribe", dict: dict, features: features});
 }
 
 var sendDict = wrapIdGetter(sendDict);
@@ -75,7 +84,7 @@ function messageDispatcher(message, sender) {
         getCurrentTabId().then(function(tabId) {
             tabToTranscribing.set(tabId, !tabToTranscribing.getOrDefault(tabId, false));
             doTranscribe(tabId);
-            browser.runtime.sendMessage({action: "send-check", transcribing: tabToTranscribing.getOrDefault(tabId, false)});
+            browser.runtime.sendMessage({action: "send-check", transcribing: tabToTranscribing.getOrDefault(tabId, false), features: getFeatures(tabId)});
         });
         break;
     case "transcript-check-page":
@@ -85,9 +94,24 @@ function messageDispatcher(message, sender) {
             }
         });
         break;
+    case 'set-features':
+        getCurrentTabId().then(function(tabId) {
+            var current = getFeatures(tabId);
+            var incoming = message.features || {};
+            var next = { stress: ('stress' in incoming) ? !!incoming.stress : current.stress,
+                         tie: ('tie' in incoming) ? !!incoming.tie : current.tie };
+            tabToFeatures.set(tabId, next);
+            // Notify content and popup; reapply if currently transcribing
+            browser.tabs.sendMessage(tabId, { action: 'set-features', features: next });
+            if (tabToTranscribing.getOrDefault(tabId, false)) {
+                browser.tabs.sendMessage(tabId, { action: 'reapply-transcription' });
+            }
+            browser.runtime.sendMessage({ action: 'send-check', transcribing: tabToTranscribing.getOrDefault(tabId, false), features: next });
+        });
+        break;
     case "transcript-check-popup":
         getCurrentTabId().then(function(tabId) {
-            browser.runtime.sendMessage({action: "send-check", transcribing: tabToTranscribing.getOrDefault(tabId, false)});
+            browser.runtime.sendMessage({action: "send-check", transcribing: tabToTranscribing.getOrDefault(tabId, false), features: getFeatures(tabId)});
         });
         break;
     case "get-dict":
@@ -99,6 +123,7 @@ function messageDispatcher(message, sender) {
 
 function deletedTabListener(tabId) {
     tabToTranscribing.delete(tabId);
+    tabToFeatures.delete(tabId);
 }
 
 browser.tabs.onRemoved.addListener(deletedTabListener);
