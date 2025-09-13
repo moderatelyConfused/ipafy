@@ -2,18 +2,11 @@ var $ = require("jquery");
 var browser = require("webextension-polyfill");
 
 var btnToggle = $("#btn-toggle");
-var btnPage = $("#btn-page");
 var labelStatus = $("#toggle-status");
 
 function updateToggleText(transcribing) {
-    labelStatus.html(transcribing ? "on" : "off");
-
-    if (transcribing) {
-        labelStatus.addClass("status-active");
-    }
-    else {
-        labelStatus.removeClass("status-active");
-    }
+    labelStatus.text(transcribing ? "on" : "off");
+    labelStatus.toggleClass("status-active", !!transcribing);
 }
 
 function messageDispatcher(message, sender) {
@@ -29,9 +22,8 @@ btnToggle.click(function() {
     browser.runtime.sendMessage({action: "toggle-transcription"});
 });
 
-btnPage.click(function() {
-    browser.runtime.sendMessage({action: "transcript-page"});
-});
-
 browser.runtime.onMessage.addListener(messageDispatcher);
 browser.runtime.sendMessage({action: "transcript-check-popup"});
+
+// Initialize default UI
+updateToggleText(false);

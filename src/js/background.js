@@ -2,7 +2,6 @@ var $ = require("jquery")
 var browser = require("webextension-polyfill");
 var serialize_map = require("./serialize-map.js");
 
-var transcribing = false;
 var tabToTranscribing = new Map();
 tabToTranscribing.getOrDefault = function(key, def) {
     if (this.has(key)) return this.get(key);
@@ -86,9 +85,6 @@ function messageDispatcher(message, sender) {
             }
         });
         break;
-    case "transcript-page":
-        doTranscribe();
-        break;
     case "transcript-check-popup":
         getCurrentTabId().then(function(tabId) {
             browser.runtime.sendMessage({action: "send-check", transcribing: tabToTranscribing.getOrDefault(tabId, false)});
@@ -105,7 +101,6 @@ function deletedTabListener(tabId) {
     tabToTranscribing.delete(tabId);
 }
 
-browser.browserAction.onClicked.addListener(sendDict);
 browser.tabs.onRemoved.addListener(deletedTabListener);
 browser.runtime.onMessage.addListener(messageDispatcher);
 getDict();

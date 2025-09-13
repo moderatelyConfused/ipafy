@@ -1,14 +1,20 @@
-<DOCTYPE html>
+<!DOCTYPE html>
 
 <html>
     <head>
         <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="stylesheet" href="../css/popup.css" />
+        <title>IPAfy</title>
     </head>
 
     <body>
-        <button class="button" id="btn-toggle">Toggle transcription for this tab [<span id="toggle-status"></span>]</button><br>
-        <button class="button" id="btn-page">(Un)transcribe this page</button>
+        <div class="header">IPAfy</div>
+
+        <button class="button primary" id="btn-toggle">
+            <span class="button-text">Enable for this tab</span>
+            <span class="status-pill" id="toggle-status">off</span>
+        </button>
 
         <script type="application/javascript" src="../js/popup.js"></script>
     </body>

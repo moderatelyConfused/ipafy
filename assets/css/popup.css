@@ -1,8 +1,57 @@
-.status-active {
-    font-weight: bold;
+/* Basic layout */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+    padding: 12px;
+    margin: 0;
+    min-width: 240px;
+    color: #1f2937;
 }
 
+.header {
+    font-size: 14px;
+    font-weight: 600;
+    color: #111827;
+    margin-bottom: 8px;
+}
+
+/* Buttons */
 .button {
     width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 10px 12px;
+    margin: 6px 0;
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+    background: #ffffff;
+    color: #111827;
+    cursor: pointer;
+    transition: background 120ms ease, border-color 120ms ease;
 }
 
+.button:hover { background: #f9fafb; }
+.button:active { background: #f3f4f6; }
+
+.button.primary { border-color: #d1d5db; }
+
+.button-text { font-size: 13px; }
+
+/* Status pill */
+.status-pill {
+    font-size: 12px;
+    padding: 2px 8px;
+    border-radius: 999px;
+    border: 1px solid #d1d5db;
+    background: #f9fafb;
+    color: #374151;
+    text-transform: lowercase;
+}
+
+.status-active {
+    border-color: #34d399;
+    background: #ecfdf5;
+    color: #065f46;
+    font-weight: 600;
+}
