@@ -29,13 +29,22 @@ function isInExcludedContext(node) {
 }
 
 function translateText(text) {
-    return text.split(/\b/u).map(function (x) {
+    var translated = text.split(/\b/u).map(function (x) {
         var upper = x.toUpperCase();
         if (dict && dict.has(upper)) {
             return dict.get(upper);
         }
         return x;
     }).join("");
+
+    // Ensure no line breaks occur at stress marks by placing WORD JOINER (U+2060)
+    // on both sides of ˈ and ˌ. Normalize to exactly one before and after.
+    translated = translated
+        .replace(/\u2060*ˈ/g, "\u2060ˈ")
+        .replace(/ˈ\u2060*/g, "ˈ\u2060")
+        .replace(/\u2060*ˌ/g, "\u2060ˌ")
+        .replace(/ˌ\u2060*/g, "ˌ\u2060");
+    return translated;
 }
 
 function walkTextNodes(root, cb) {
