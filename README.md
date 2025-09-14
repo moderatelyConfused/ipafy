@@ -1,4 +1,9 @@
-# IPAfy
+# IPAfy-fork
+
+This is a fork of [IPAfy](https://github.com/MattX/ipafy) modified to work in modern firefox and some QoL fixes.
+To build it, you will need nodejs v10.24.1.
+
+# Original README
 
 [Homepage on Terbium.io](https://terbium.io/2017/07/ipafy/)
 

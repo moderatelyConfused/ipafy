@@ -1,6 +1,6 @@
 {
-  "name": "ipafy",
-  "version": "1.2.0",
+  "name": "ipafy-fork",
+  "version": "1.0.0",
   "description": "Transcribes English web pages into International Phonetic Alphabet (IPA)",
   "scripts": {
     "build": "webpack --mode=development",
@@ -8,14 +8,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/MattX/ipafy.git"
+    "url": "git+https://github.com/moderatelyConfused/ipafy.git"
   },
-  "author": "Matthieu Felix <matthieufelix@gmail.com>",
+  "author": "moderatelyConfused <110311951+moderatelyConfused@users.noreply.github.com>",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/MattX/ipafy/issues"
+    "url": "https://github.com/moderatelyConfused/ipafy/issues"
   },
-  "homepage": "https://github.com/MattX/ipafy#readme",
+  "homepage": "https://github.com/moderatelyConfused/ipafy#readme",
   "devDependencies": {
     "copy-webpack-plugin": "^4.6.0",
     "webpack": "^4.24.0",

@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
-  "name": "IPAfy",
-  "version": "1.2",
+  "name": "IPAfy-fork",
+  "version": "1.0",
 
   "description": "Transcribes English web pages into International Phonetic Alphabet (IPA)",
   "icons": {
